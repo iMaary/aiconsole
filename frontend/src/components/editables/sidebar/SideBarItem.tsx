@@ -181,12 +181,20 @@ const SideBarItem = ({
 
   return (
     <ContextMenu options={menuItems} ref={triggerRef} onOpenChange={handleOpenContextChange}>
-      <div className="max-w-[295px] mb-[5px]">
+      <div className="max-w-[295px] mb-[5px] flex items-center gap-2">
+        <Checkbox 
+          checked={isSelected} 
+          onCheckedChange={handleSelect}
+          className="w-5 h-5 border-2 border-gray-500 rounded-md"
+        >
+          {isSelected && <Check className="w-4 h-4 text-white"/>}
+        </Checkbox>
         <div
           className={cn(
             forced && editableObjectType === 'agent' && 'text-agent',
             forced && editableObjectType === 'material' && 'text-material',
             disabled && 'opacity-50',
+            'flex-1 min-w-0'
           )}
         >
           <NavLink
@@ -203,13 +211,6 @@ const SideBarItem = ({
           >
             {({ isActive }) => (
               <>
-                <Checkbox 
-                  checked={isSelected} 
-                  onCheckedChange={handleSelect}
-                  className="w-5 h-5 border-2 border-gray-500 rounded-md"
-                >
-                  {isSelected && <Check className="w-4 h-4 text-white"/>}
-                </Checkbox>
                 <Icon
                   icon={EditableIcon}
                   className={cn(
