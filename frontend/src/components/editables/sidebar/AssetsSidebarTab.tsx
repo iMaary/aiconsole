@@ -19,7 +19,7 @@ import SideBarItem from './SideBarItem';
 import { Icon } from '@/components/common/icons/Icon';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { useDeleteEditableObjectWithUserInteraction } from '@/utils/editables/useDeleteEditableObjectWithUserInteraction';
+import { useBulkDeleteEditableObjectWithUserInteraction } from '@/utils/editables/useBulkDeleteEditableObjectWithUserInteraction';
 
 const getTitle = (status: AssetStatus, isAgentChosen: boolean, assetType: AssetType) => {
   switch (status) {
@@ -54,10 +54,10 @@ export const AssetsSidebarTab = ({ assetType, assets }: { assetType: AssetType; 
   const hasForcedAssets = Boolean(groupedAssets[0][1].length);
   
   const [selectedAssets, setSelectedAssets] = useState<string[]>([]);
-  const handleDelete = useDeleteEditableObjectWithUserInteraction(assetType);
+  const handleDelete = useBulkDeleteEditableObjectWithUserInteraction(assetType);
 
   const handleBulkDelete = () => {
-    selectedAssets.forEach((id) => handleDelete(id));
+    handleDelete(selectedAssets);
     setSelectedAssets([]);
   };
 

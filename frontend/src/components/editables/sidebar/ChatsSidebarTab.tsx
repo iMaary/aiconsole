@@ -21,7 +21,7 @@ import { useEffect, useState } from 'react';
 import SideBarItem from './SideBarItem';
 import { Icon } from '@/components/common/icons/Icon';
 import { Trash2 } from "lucide-react";
-import { useDeleteEditableObjectWithUserInteraction } from '@/utils/editables/useDeleteEditableObjectWithUserInteraction';
+import { useBulkDeleteEditableObjectWithUserInteraction } from '@/utils/editables/useBulkDeleteEditableObjectWithUserInteraction';
 
 export const ChatsSidebarTab = () => {
   const chatHeadlines = useEditablesStore((state) => state.chats);
@@ -30,7 +30,7 @@ export const ChatsSidebarTab = () => {
   const setIsChatLoading = useChatStore((state) => state.setIsChatLoading);
 
   const [selectedChats, setSelectedChats] = useState<string[]>([]);
-  const handleDelete = useDeleteEditableObjectWithUserInteraction("chat");
+  const handleDelete = useBulkDeleteEditableObjectWithUserInteraction("chat");
 
   useEffect(() => {
     if (chat?.id) {
@@ -46,7 +46,7 @@ export const ChatsSidebarTab = () => {
   ];
 
   const handleBulkDelete = () => {
-    selectedChats.forEach((id) => handleDelete(id));
+    handleDelete(selectedChats);
     setSelectedChats([]);
   };
 
