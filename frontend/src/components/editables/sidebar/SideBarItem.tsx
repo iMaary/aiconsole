@@ -26,16 +26,19 @@ import { convertNameToId } from '@/utils/editables/convertNameToId';
 import { getEditableObjectIcon } from '@/utils/editables/getEditableObjectIcon';
 import { useAssets } from '@/utils/editables/useAssets';
 import { useEditableObjectContextMenu } from '@/utils/editables/useContextMenuForEditable';
-import { MoreVertical } from 'lucide-react';
+import { Checkbox } from '@radix-ui/react-checkbox';
+import { Check, MoreVertical } from 'lucide-react';
 import { KeyboardEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 const SideBarItem = ({
   editableObjectType,
   editableObject,
+  onBulkSelect,
 }: {
   editableObject: EditableObject;
   editableObjectType: EditableObjectType;
+  onBulkSelect: (id: string, isSelected: boolean) => void;
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -48,6 +51,7 @@ const SideBarItem = ({
   const [isEditing, setIsEditing] = useState(false);
   const [isShowingContext, setIsShowingContext] = useState(false);
   const [blockBlur, setBlockBlur] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
 
   const showToast = useToastsStore((state) => state.showToast);
 
@@ -169,6 +173,12 @@ const SideBarItem = ({
     setIsShowingContext(open);
   };
 
+  const handleSelect = () => {
+    const newState = !isSelected;
+    setIsSelected(newState);
+    onBulkSelect(editableObject.id, newState);
+  };
+
   return (
     <ContextMenu options={menuItems} ref={triggerRef} onOpenChange={handleOpenContextChange}>
       <div className="max-w-[295px] mb-[5px]">
@@ -193,6 +203,13 @@ const SideBarItem = ({
           >
             {({ isActive }) => (
               <>
+                <Checkbox 
+                  checked={isSelected} 
+                  onCheckedChange={handleSelect}
+                  className="w-5 h-5 border-2 border-gray-500 rounded-md"
+                >
+                  {isSelected && <Check className="w-4 h-4 text-white"/>}
+                </Checkbox>
                 <Icon
                   icon={EditableIcon}
                   className={cn(
